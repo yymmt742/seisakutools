@@ -15,5 +15,3 @@ pg = st.navigation(
         st.Page("pages/smiles2svg.py", title="化学構造式描画"),
     ]
 )
-
-pg.run()
