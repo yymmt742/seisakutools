@@ -3,7 +3,6 @@ name = "seisakutools"
 version = "0.1.0"
 requires-python = ">=3.14"
 readme = "README.md"
-requires-python = ">=3.14"
 dependencies = [
     "streamlit>=1.59.1",
     "numpy",
