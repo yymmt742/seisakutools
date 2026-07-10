@@ -4,9 +4,9 @@ from rdkit import Chem
 from rdkit.Chem import rdDepictor
 from rdkit.Chem.Draw import rdMolDraw2D
 
-st.set_page_config(page_title="SMILES → SVG")
+st.set_page_config(page_title="Chemical fomula")
 
-st.title("SMILES → SVG")
+st.title("化学構造式描画")
 
 smiles = st.text_input("SMILES", "CC(C)Oc1ccccc1C(=O)O")
 

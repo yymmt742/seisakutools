@@ -28,9 +28,9 @@ from sympy.parsing.sympy_parser import (
 from scipy.integrate import quad
 import numpy as np
 
-st.set_page_config(page_title="Function Plotter", layout="wide")
+st.set_page_config(page_title="Wave function Plotter", layout="wide")
 
-st.title("Function Plotter")
+st.title("波動関数描画")
 
 # -------------------------
 # Sidebar
@@ -44,7 +44,7 @@ with st.sidebar:
     # expr_str = st.text_input("y =", value="sin(x) + 0.3*cos(5*x)")
 
     kind = st.selectbox(
-        "Function",
+        "関数形",
         [
             "Gaussian",
             "Double slit",
@@ -80,17 +80,6 @@ g = lambdify(x, expr * conjugate(expr), "numpy")
 xx = np.linspace(xmin, xmax, n)
 phi = f(xx)
 rho = g(xx)
-
-# transformations = standard_transformations + (implicit_multiplication_application,)
-
-# try:
-# expr = parse_expr(expr_str, transformations=transformations)
-# I = Integral(expr * conjugate(expr), (x, -oo, oo)).doit()
-# I = (1 / I if I > 1e-16 else I) if I.is_finite else 0.0
-
-# except Exception as e:
-#    st.error(e)
-#    st.stop()
 
 # -------------------------
 # Plot
