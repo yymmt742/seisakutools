@@ -10,8 +10,9 @@ st.write("""
 
 pg = st.navigation(
     [
-        st.page_link("streamlit_app.py", label="トップページ", icon="🧪"),
-        st.page_link("pages/wavefunction.py", label="波動関数プロット"),
-        st.page_link("pages/smiles2svg.py", label="化学構造式描画"),
+        st.Page("streamlit_app.py", title="トップページ", icon="🧪"),
     ]
 )
+
+st.page_link("pages/wavefunction.py", label="wavefunction plotter")
+st.page_link("pages/smiles2svg.py", label="SMILES -> SVG")
