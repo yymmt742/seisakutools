@@ -8,6 +8,12 @@ st.write("""
     左側のメニューから選択してください。
     """)
 
+pg = st.navigation(
+    [
+        st.Page("streamlit_app.py", title="トップページ", icon="🧪"),
+        st.Page("pages/wavefunction.py", title="波動関数プロット"),
+        st.Page("pages/smiles2svg.py", title="化学構造式描画"),
+    ]
+)
 
-st.page_link("pages/wavefunction.py", label="wavefunction plotter")
-st.page_link("pages/smiles2svg.py", label="SMILES -> SVG")
+pg.run()
