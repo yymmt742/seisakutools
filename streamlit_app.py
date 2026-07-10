@@ -11,6 +11,8 @@ st.write("""
     左側のメニューから選択してください。
     """)
 
+
+page = Path("pages/wavefunction.py")
 spec = importlib.util.spec_from_file_location("wavefunction", page)
 module = importlib.util.module_from_spec(spec)
 
