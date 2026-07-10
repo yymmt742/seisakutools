@@ -11,6 +11,9 @@ st.write("""
     左側のメニューから選択してください。
     """)
 
+spec = importlib.util.spec_from_file_location("wavefunction", page)
+module = importlib.util.module_from_spec(spec)
+
 try:
     spec.loader.exec_module(module)
     st.success("wavefunction.py imported successfully")
