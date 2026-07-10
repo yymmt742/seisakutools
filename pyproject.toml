@@ -1,12 +1,17 @@
 [project]
-name = "blank-app-template"
+name = "seisakutools"
 version = "0.1.0"
-description = "A simple Streamlit app template."
+requires-python = ">=3.14"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "streamlit>=1.59.1",
+    "numpy",
+    "matplotlib",
+    "scipy",
+    "sympy",
 ]
 
 [tool.uv]
 package = false
+
