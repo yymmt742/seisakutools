@@ -8,11 +8,5 @@ st.write("""
     左側のメニューから選択してください。
     """)
 
-pg = st.navigation(
-    [
-        st.Page("streamlit_app.py", title="トップページ", icon="🧪"),
-    ]
-)
-
 st.page_link("pages/wavefunction.py", label="wavefunction plotter")
 st.page_link("pages/smiles2svg.py", label="SMILES -> SVG")
