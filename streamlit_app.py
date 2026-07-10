@@ -8,5 +8,5 @@ st.write("""
     左側のメニューから選択してください。
     """)
 
-st.page_link("pages/wavefunction.py", label="wavefunction plotter")
-st.page_link("pages/smiles2svg.py", label="SMILES -> SVG")
+# st.page_link("pages/wavefunction.py", label="wavefunction plotter")
+# st.page_link("pages/smiles2svg.py", label="SMILES -> SVG")
