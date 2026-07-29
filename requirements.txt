@@ -3,4 +3,4 @@ matplotlib
 scipy
 sympy
 rdkit
-PIL
+Pillow
