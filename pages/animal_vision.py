@@ -6,6 +6,7 @@ import colour
 from PIL import Image, ImageFilter
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
+from pathlib import Path
 
 
 class AnimalVision:
@@ -30,7 +31,8 @@ class AnimalVision:
         observer: str = "CIE 1931 2 Degree Standard Observer",
         sigma: float = 0.0,
     ):
-        self.cones = pd.read_csv(cone_csv)
+        BASE_DIR = Path(__file__).resolve().parent
+        self.cones = pd.read_csv(BASE_DIR / cone_csv)
         self.sigma = sigma
 
         self.wavelength = self.cones.iloc[:, 0].to_numpy()
