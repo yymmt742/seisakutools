@@ -297,9 +297,9 @@ class AnimalVision:
         RGB float
         """
 
-        img = image.astype(float)
+        img = np.asarray(image).astype(np.float32)
 
-        if img.max() > 1:
+        if img.max() > 1.0:
             img /= 255.0
 
         #
