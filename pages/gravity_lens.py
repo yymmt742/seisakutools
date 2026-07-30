@@ -49,7 +49,7 @@ def ray_tracer(
 
     _img = np.asarray(img).astype(np.float32)
     if _img.max() > 1:
-        img /= 255.0
+        _img /= 255.0
     out = np.zeros_like(_img)
 
     # ==========================================================
