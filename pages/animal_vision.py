@@ -353,7 +353,7 @@ st.title("Animal vision simulator")
 model = st.selectbox("動物を選択", ["dog"])
 
 if model == "dog":
-    av = AnimalVision("data/dog_cones.csv", sigma=0.005)
+    av = AnimalVision("dog_cones.csv", sigma=0.005)
 else:
     av = None
 
