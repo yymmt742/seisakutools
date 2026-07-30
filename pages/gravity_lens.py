@@ -43,94 +43,69 @@ def ray_tracer(
     img: Image.Image,
     thetaE: float = 0.18,  # Einstein radius (image coordinate)
     FOV: float = 2.0,  # coordinate = [-FOV, FOV]
+    offX: float = 0.0,
+    offY: float = 0.0,
 ) -> Image.Image:
 
     _img = np.asarray(img).astype(np.float32) / 255.0
-    H, W = _img.shape[:2]
-
     out = np.zeros_like(_img)
 
-    for iy in range(H):
-        for ix in range(W):
-            theta_x, theta_y = pixel_to_coord(ix, iy, W, H, FOV)
-            beta_x, beta_y = lens(theta_x, theta_y, thetaE)
-            sx, sy = coord_to_pixel(beta_x, beta_y, W, H, FOV)
-            out[iy, ix] = bilinear(_img, sx, sy)
+    # ==========================================================
+    # Image coordinate -> Coordinate
+    # ==========================================================
 
-    return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8))
+    H, W = _img.shape[:2]
+    aspect = W / H
+    x = np.linspace(-FOV * aspect, FOV * aspect, W) + offX
+    y = np.linspace(-FOV, FOV, H) + offY
+    theta_x, theta_y = np.meshgrid(x, y)
 
+    # ==========================================================
+    # Lens equation
+    #
+    # theta -> beta
+    #
+    # ==========================================================
 
-# ==========================================================
-# Bilinear interpolation
-# ==========================================================
+    r2 = theta_x**2 + theta_y**2 + 1e-12
+    alpha_x = thetaE**2 * theta_x / r2
+    alpha_y = thetaE**2 * theta_y / r2
+    beta_x = theta_x - alpha_x - offX
+    beta_y = theta_y - alpha_y - offY
 
+    # ==========================================================
+    # Coordinate -> Image coordinate
+    # ==========================================================
 
-def bilinear(im, x, y):
+    sx = (beta_x / (FOV * aspect) + 1) * 0.5 * (W - 1)
+    sy = (1 - (beta_y / FOV + 1) * 0.5) * (H - 1)
 
-    h, w = im.shape[:2]
+    # ==========================================================
+    # Bilinear interpolation
+    # ==========================================================
 
-    _x = w - 2 if x >= w - 1 else (0 if x < 0 else x)
-    _y = h - 2 if y >= h - 1 else (0 if y < 0 else y)
+    x0 = np.floor(sx).astype(np.int32)
+    y0 = np.floor(sy).astype(np.int32)
+    dx = sx - x0
+    dy = sy - y0
+    x0 = np.clip(x0, 0, W - 2)
+    y0 = np.clip(y0, 0, H - 2)
 
-    x0 = int(np.floor(_x))
-    y0 = int(np.floor(_y))
+    c00 = _img[y0, x0]
+    c10 = _img[y0, x0 + 1]
+    c01 = _img[y0 + 1, x0]
+    c11 = _img[y0 + 1, x0 + 1]
 
-    dx = _x - x0
-    dy = _y - y0
-
-    c00 = im[y0, x0]
-    c10 = im[y0, x0 + 1]
-    c01 = im[y0 + 1, x0]
-    c11 = im[y0 + 1, x0 + 1]
-
-    return (
+    dx = dx[..., None]
+    dy = dy[..., None]
+    out = (
         (1 - dx) * (1 - dy) * c00
         + dx * (1 - dy) * c10
         + (1 - dx) * dy * c01
         + dx * dy * c11
     )
 
-
-# ==========================================================
-# Lens equation
-#
-# theta -> beta
-#
-# ==========================================================
-
-
-def lens(theta_x, theta_y, thetaE):
-
-    r2 = theta_x**2 + theta_y**2 + 1e-12
-
-    alpha_x = thetaE**2 * theta_x / r2
-    alpha_y = thetaE**2 * theta_y / r2
-
-    beta_x = theta_x - alpha_x
-    beta_y = theta_y - alpha_y
-
-    return beta_x, beta_y
-
-
-# ==========================================================
-# Coordinate conversion
-# ==========================================================
-
-
-def coord_to_pixel(x: int, y: int, W: int, H: int, FOV: float) -> tuple[float]:
-
-    px = (x / (FOV * W / H) + 1) * 0.5 * (W - 1)
-    py = (1 - (y / FOV + 1) * 0.5) * (H - 1)
-
-    return px, py
-
-
-def pixel_to_coord(ix: int, iy: int, W: int, H: int, FOV: float) -> tuple[float]:
-
-    x = (ix / (W - 1) * 2 - 1) * FOV * W / H
-    y = ((1 - iy / (H - 1)) * 2 - 1) * FOV
-
-    return x, y
+    return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8))
 
 
 if uploaded_file is None:
@@ -143,8 +118,10 @@ preview.thumbnail((256, 256))
 
 thetaE = st.slider(r"$\theta_E$ (アインシュタイン半径)", 0.0, 0.5, 0.15)
 FOV = st.slider("カメラの視野", 0.1, 5.0, 2.0)
+offX = st.slider("オフセットX", -1.0, 1.0, 0.0)
+offY = st.slider("オフセットY", -1.0, 1.0, 0.0)
 
-result = ray_tracer(preview, thetaE, FOV)
+result = ray_tracer(preview, thetaE, FOV, offX, offY)
 
 col1, col2 = st.columns(2)
 with col1:
@@ -157,7 +134,7 @@ with col2:
 
 if st.button("画像処理を開始"):
     with st.spinner("画像処理中..."):
-        result = ray_tracer(image, thetaE, FOV)
+        result = ray_tracer(image, thetaE, FOV, offX, offY)
         buf = io.BytesIO()
         result.save(buf, "PNG")
         st.download_button(
