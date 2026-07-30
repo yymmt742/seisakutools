@@ -11,3 +11,4 @@ st.write("""
 st.page_link("pages/wavefunction.py", label="波動関数プロット")
 st.page_link("pages/smiles2svg.py", label="科学構造式描画")
 st.page_link("pages/gravity_lens.py", label="重力レンズシミュレータ")
+st.page_link("pages/animal_vision.py", label="動物の色覚シミュレータ")
