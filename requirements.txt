@@ -1,6 +1,8 @@
 numpy
 matplotlib
+pandas
 scipy
 sympy
 rdkit
 Pillow
+colour-science
