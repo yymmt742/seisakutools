@@ -6,3 +6,4 @@ sympy
 rdkit
 Pillow
 colour-science
+pymupdf
