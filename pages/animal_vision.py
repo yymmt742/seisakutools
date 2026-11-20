@@ -312,7 +312,9 @@ class AnimalVision:
         #
         # RGB -> cone
         #
-        cone = img @ self.M_rgb_to_cone.T
+        print(img.shape)
+        print(self.M_rgb_to_cone.shape)
+        cone = img[:, :, :3] @ self.M_rgb_to_cone.T
         #
         # von Kries adaptation
         #
